@@ -76,11 +76,30 @@ public class MyController {
 		log.info("===== filter 컨트롤러 =====");
 		return myService.exFilter();
 	}
-	
-	@GetMapping("exDistinct")
+
+	@GetMapping("/exDistinct")
 	public String exDistinct() {
-		log.info("===== filter 컨트롤러 =====");
+		log.info("===== distinct 컨트롤러 =====");
 		return myService.exDistinct();
 	}
+	
+	@GetMapping("/exMap")
+	public String exMap() {
+		log.info("===== map 컨트롤러 =====");
+		return myService.exMap();
+	}
+	
+//	3-3-9. java if문사용 null 체크
+	@GetMapping("/exNull1")
+	public String exNull1() {
+		log.info("===== exNull1 컨트롤러 =====");
+		return myService.exNull1();
+	}
 
+//	3-3-11. 비어있는 Optional 반환
+	@GetMapping("/exNull2")
+	public String exNull2() {
+		log.info("===== exNull2 컨트롤러 =====");
+		return myService.exNull2();
+	}
 }

@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -162,7 +163,7 @@ public class MyService {
 		List<Integer> evenList = IntStream.rangeClosed(1, 10).filter(num -> num % 2 == 0)
 				// IntStream을 Stream<Integer>로 변환
 				.boxed().collect(Collectors.toList());
-			evenList.stream().forEach(value -> log.info(String.valueOf(value)));
+		evenList.stream().forEach(value -> log.info(String.valueOf(value)));
 
 		return "filter 예제";
 	}
@@ -170,10 +171,52 @@ public class MyService {
 //	위에 예제처럼 변수최소화 하기
 	public String exDistinct() {
 		// TODO Auto-generated method stub
-		List<Integer> numberList = List.of(1,1,1,1,2,2,2,2,3,3,4);
+		List<Integer> numberList = List.of(1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 4);
 		List<Integer> distinctList = numberList.stream().distinct().toList();
 		distinctList.stream().forEach(value -> log.info(String.valueOf(value)));
 		return "중복제거 예제";
 	}
+
+	public String exMap() {
+		// TODO Auto-generated method stub
+		String[] lowercaseArray = new String[] {"public", "static", "void"};
+		List<String> lowercaseList = Arrays.asList(lowercaseArray);
+		List<String> uppercaseList = lowercaseList.stream()
+				.map(value -> value.toUpperCase()).toList();
+//		람다를 메소드참조로 String.aluof()는 log.info()가 내부적으로 처리가능
+		uppercaseList.stream().forEach(log::info);
+		return "컬렉션의 요소들에 특정 연산을 적용한 새로운 스트림 생성한 Map 스트림";
+	}
+
+	private static String getSomeStr1() {
+		return null;
+	}
+	public String exNull1() {
+		// TODO Auto-generated method stub
+		String isThisNull = getSomeStr1();
+		
+		if(null != isThisNull) {
+			log.info(isThisNull.toUpperCase());
+		}
+		return "if문을 사용한  null 체크";
+	}
+	
+//	Optional 사용 null체크
+	private static Optional<String> getSomeStr2(){
+//		null 반환이 아닌 비어있는 옵션을 반환
+//		return Optional.empty();
+		return Optional.ofNullable("public static void");
+	}
+	
+	public String exNull2() {
+		Optional<String> isThisNull = getSomeStr2();
+		
+		isThisNull.ifPresent(str -> log.info(str.toUpperCase()));
+	return "Optional 사용한 Nullcheck";
+	}
+	
+//	collect Collectors 대신 .toList로 생성가능
+	
+	
 
 }
