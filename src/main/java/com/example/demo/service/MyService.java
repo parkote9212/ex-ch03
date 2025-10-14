@@ -2,7 +2,11 @@ package com.example.demo.service;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +16,7 @@ import org.springframework.stereotype.Service;
 public class MyService {
 
 	private static final Logger log = LoggerFactory.getLogger(MyService.class);
-	
+
 	public List<String> getMethodList() {
 		log.info("===== getMethodList 서비스 (리플렉션) =====");
 		List<String> methodList = new ArrayList<>();
@@ -20,19 +24,19 @@ public class MyService {
 		try {
 			// 1. MyService 클래스의 메타데이터(정보)를 가져옵니다.
 			Class<?> serviceClass = this.getClass();
-			
+
 			// 2. 클래스에 정의된 모든 메소드의 목록을 배열로 가져옵니다.
 			Method[] methods = serviceClass.getDeclaredMethods();
-			
+
 			// 3. 각 메소드를 순회하며 이름을 리스트에 추가합니다.
 			for (Method method : methods) {
 				methodList.add(method.getName());
 			}
-			
+
 		} catch (Exception e) {
 			log.error("메소드 목록을 가져오는 중 오류 발생", e);
 		}
-		
+
 		return methodList;
 	}
 
@@ -109,12 +113,67 @@ public class MyService {
 		int i = 0;
 
 		while (i < array.length) {
-			String msg = "i = " + array[i] ;
+			String msg = "i = " + array[i];
 			log.info(msg);
 			list.add(msg);
 			i++;
-			}
-			return list;
+		}
+		return list;
+	}
+
+	public String apiStr1() {
+		log.info("===== api스트림1 서비스 =====");
+		// TODO Auto-generated method stub
+//		foreach
+		log.info("foreach");
+		List list = new ArrayList<String>();
+
+		list.add("public");
+		list.add("static");
+		list.add("void");
+
+		list.stream().forEach(str -> log.info((String) str));
+
+//		evenlist
+		log.info("evenlist");
+
+		Integer[] integerArray = new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+		List<Integer> list2 = Arrays.asList(integerArray);
+
+		List<Integer> evenList = list2.stream().filter(value -> value % 2 == 0).collect(Collectors.toList());
+
+		evenList.stream().forEach(value -> log.info(String.valueOf(value)));
+		return "foreach" + " evenlist";
+
+	}
+
+	public String exForEach() {
+		// TODO Auto-generated method stub
+		Integer[] integerArray = new Integer[] { 1, 2, 3, 4, 5 };
+		List<Integer> list = Arrays.asList(integerArray);
+		list.stream().forEach(value -> log.info(String.valueOf(value)));
+		return "foreach 예제";
+	}
+
+// gpt에 리팩토링요청 변수 최소화
+//	솔직히 깔끔해졌는지 모르겠다.
+	public String exFilter() {
+		// TODO Auto-generated method stub
+		List<Integer> evenList = IntStream.rangeClosed(1, 10).filter(num -> num % 2 == 0)
+				// IntStream을 Stream<Integer>로 변환
+				.boxed().collect(Collectors.toList());
+			evenList.stream().forEach(value -> log.info(String.valueOf(value)));
+
+		return "filter 예제";
+	}
+
+//	위에 예제처럼 변수최소화 하기
+	public String exDistinct() {
+		// TODO Auto-generated method stub
+		List<Integer> numberList = List.of(1,1,1,1,2,2,2,2,3,3,4);
+		List<Integer> distinctList = numberList.stream().distinct().toList();
+		distinctList.stream().forEach(value -> log.info(String.valueOf(value)));
+		return "중복제거 예제";
 	}
 
 }
