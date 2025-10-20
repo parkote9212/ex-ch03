@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 상세</title>
+</head>
+<body>
+<h1 th:text="${article.title}">제목입니다</h1>
+<p th:text="${article.content}">내용입니다.</p>
+
+<a th:href="@{/articles}">목록으로 돌아가기</a>
+</body>
+</html>
