@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>학생 목록</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        table {
+            width: 90%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+        }
+        tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+        .empty-list {
+            text-align: center;
+            color: #888;
+            padding: 20px;
+        }
+        /* (기존 스타일... 생략) */
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        /* --- [추가] --- */
+        th.actions, td.actions {
+            text-align: center;
+            width: 150px; /* 버튼이 들어갈 수 있게 너비 조절 */
+        }
+        td.actions a, td.actions button {
+            padding: 5px 10px;
+            text-decoration: none;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        td.actions a {
+            background-color: #007bff; /* '수정' 버튼 (파란색) */
+            color: white;
+        }
+        td.actions button {
+            background-color: #dc3545; /* '삭제' 버튼 (빨간색) */
+            color: white;
+        }
+        /* form을 inline으로 만들기 위한 스타일 */
+        td.actions form {
+            display: inline-block;
+            margin: 0;
+        }
+
+        /* --- [신규 추가: '학생 추가' 버튼 스타일] --- */
+        .add-button {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #28a745; /* 초록색 */
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-bottom: 20px; /* 테이블과의 간격 */
+        }
+        /* --- [여기까지 추가] --- */
+    </style>
+</head>
+<body>
+
+<h1>전체 학생 목록</h1>
+
+<a th:href="@{/students/new}" class="add-button">
+    학생 추가하기
+</a>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>이름</th>
+        <th>이메일</th>
+        <th>나이</th>
+        <th>등록일시</th>
+        <th class="actions">관리</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="student : ${studentList}">
+        <td th:text="${student.id}">1</td>
+        <td th:text="${student.name}">김학생</td>
+        <td th:text="${student.email}">student@example.com</td>
+        <td th:text="${student.age}">21</td>
+        <td th:text="${#temporals.format(student.createdAt, 'yyyy-MM-dd HH:mm')}">
+            2025-10-23 14:00
+        </td>
+
+        <td class="actions">
+            <a th:href="@{/students/edit/{id}(id=${student.id})}">수정</a>
+
+            <form th:action="@{/students/delete/{id}(id=${student.id})}"
+                  method="post" style="display:inline;">
+                <button type="submit"
+                        onclick="return confirm('정말로 삭제하시겠습니까?');">삭제</button>
+            </form>
+        </td>
+    </tr>
+
+    <tr th:if="${studentList.isEmpty()}">
+        <td colspan="6" class="empty-list">
+            등록된 학생이 없습니다.
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
